@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-import { createPlugin } from '@backstage/core';
+import { createPlugin, createApiFactory } from '@backstage/core';
 import RadarPage from './components/RadarPage';
+import { techRadarApiRef, TechRadar } from './api';
 
 export const plugin = createPlugin({
   id: 'tech-radar',
+  apis: [
+    createApiFactory({
+      implements: techRadarApiRef,
+      deps: {},
+      factory: () => new TechRadar({ width: 1500, height: 800 }),
+    }),
+  ],
   register({ router }) {
     router.registerRoute('/tech-radar', RadarPage);
   },

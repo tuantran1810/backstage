@@ -29,9 +29,15 @@
  * limitations under the License.
  */
 
-import { createPlugin, createRouteRef } from '@backstage/core';
+import {
+  createPlugin,
+  createRouteRef,
+  createApiFactory,
+  configApiRef,
+} from '@backstage/core';
 import { TechDocsHome } from './reader/components/TechDocsHome';
 import { TechDocsPage } from './reader/components/TechDocsPage';
+import { techdocsStorageApiRef, TechDocsStorageApi } from './api';
 
 export const rootRouteRef = createRouteRef({
   path: '/docs',
@@ -45,6 +51,16 @@ export const rootDocsRouteRef = createRouteRef({
 
 export const plugin = createPlugin({
   id: 'techdocs',
+  apis: [
+    createApiFactory({
+      implements: techdocsStorageApiRef,
+      deps: { configApi: configApiRef },
+      factory: ({ configApi }) =>
+        new TechDocsStorageApi({
+          apiOrigin: configApi.getString('techdocs.storageUrl'),
+        }),
+    }),
+  ],
   register({ router }) {
     router.addRoute(rootRouteRef, TechDocsHome);
     router.addRoute(rootDocsRouteRef, TechDocsPage);
