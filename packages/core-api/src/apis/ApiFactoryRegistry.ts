@@ -60,12 +60,12 @@ export class ApiFactoryRegistry implements ApiFactoryHolder {
     factory: ApiFactory<Api, Deps>,
   ) {
     const priority = ScopeLevels[scope];
-    const existing = this.factories.get(factory.implements);
-    if (existing && existing.priority > priority) {
+    const existing = this.factories.get(factory.api);
+    if (existing && existing.priority >= priority) {
       return false;
     }
 
-    this.factories.set(factory.implements, { priority, factory });
+    this.factories.set(factory.api, { priority, factory });
     return true;
   }
 
