@@ -20,7 +20,7 @@ import { techRadarApiRef, TechRadar } from '../src';
 
 createDevApp()
   .registerPlugin(plugin)
-  .registerApiFactory({
+  .registerApi({
     implements: techRadarApiRef,
     deps: {},
     factory: () => new TechRadar({ width: 1500, height: 800 }),
